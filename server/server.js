@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bookToMongoRouter from './mongoSchemaCreation.js';
@@ -342,6 +343,12 @@ app.use(
     const id = req.body._id;
     const update = await User.findByIdAndUpdate(id, req.body);
   })
+);
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, '/frontend/build')));
+app.get('*', (req, res) =>
+  res.sendFile(path.join(__dirname, '/frontend/build/index.html'))
 );
 
 app.use((err, req, res, next) => {
